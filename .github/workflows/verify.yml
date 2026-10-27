@@ -1,0 +1,14 @@
+name: Migration verification
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  postgres:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify fresh installs, adoption, and rollback
+        shell: pwsh
+        run: ./tests/integration.ps1

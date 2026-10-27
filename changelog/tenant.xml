@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog logicalFilePath="commerce/tenant" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.33.xsd">
+  <!-- Stable logical paths keep identities independent of checkout/container location. -->
+  <changeSet id="tenant-legacy-state-guard" author="commerce" runAlways="true">
+    <sql splitStatements="false"><![CDATA[
+DO $guard$
+DECLARE state record;
+BEGIN
+  IF to_regclass('public.schema_migrations_tenant') IS NOT NULL THEN
+    EXECUTE 'SELECT version, dirty FROM public.schema_migrations_tenant' INTO state;
+    IF state.version IS NULL OR state.dirty IS DISTINCT FROM false OR state.version < 1 OR state.version > 9
+       OR (SELECT count(*) FROM public.schema_migrations_tenant) <> 1 THEN
+      RAISE EXCEPTION 'Unsafe legacy tenant migration state. Repair the old migration state before adopting Liquibase.';
+    END IF;
+  END IF;
+END
+$guard$;
+    ]]></sql>
+    <rollback/>
+  </changeSet>
+  <changeSet id="0001_messaging" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 1 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0001_messaging.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0001_messaging.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0002_orders" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 2 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0002_orders.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0002_orders.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0003_stores" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 3 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0003_stores.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0003_stores.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0004_catalog" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 4 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0004_catalog.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0004_catalog.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0005_products" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 5 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0005_products.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0005_products.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0006_inventory" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 6 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0006_inventory.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0006_inventory.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0007_bom" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 7 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0007_bom.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0007_bom.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0008_warehouse" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 8 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0008_warehouse.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0008_warehouse.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0009_stock_audit" author="commerce" logicalFilePath="commerce/tenant">
+    <preConditions onFail="MARK_RAN" onError="HALT">
+      <not><and>
+        <tableExists schemaName="public" tableName="schema_migrations_tenant"/>
+        <sqlCheck expectedResult="1">SELECT CASE WHEN version &gt;= 9 AND NOT dirty THEN 1 ELSE 0 END FROM public.schema_migrations_tenant</sqlCheck>
+      </and></not>
+    </preConditions>
+    <sqlFile path="../db/migrations/tenant/0009_stock_audit.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0009_stock_audit.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="tenant-archive-legacy-state" author="commerce">
+    <sql splitStatements="false"><![CDATA[
+DO $archive$
+BEGIN
+  IF to_regclass('public.schema_migrations_tenant') IS NOT NULL THEN
+    ALTER TABLE public.schema_migrations_tenant RENAME TO legacy_schema_migrations_tenant;
+  END IF;
+END
+$archive$;
+    ]]></sql>
+    <!-- Keep the old version record for audit. Never reactivate the old runner. -->
+    <rollback/>
+  </changeSet>
+</databaseChangeLog>

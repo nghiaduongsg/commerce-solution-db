@@ -1,0 +1,10 @@
+services:
+  migrate:
+    build: .
+    image: commerce-solution-db:local
+    environment:
+      LIQUIBASE_COMMAND_URL: ${LIQUIBASE_COMMAND_URL:?Set the PostgreSQL JDBC URL}
+      LIQUIBASE_COMMAND_USERNAME: ${LIQUIBASE_COMMAND_USERNAME:?Set the migration owner}
+      LIQUIBASE_COMMAND_PASSWORD: ${LIQUIBASE_COMMAND_PASSWORD:?Set the migration password}
+      LIQUIBASE_COMMAND_CHANGELOG_FILE: ${LIQUIBASE_COMMAND_CHANGELOG_FILE:-changelog/primary.xml}
+    command: ["update"]
