@@ -141,4 +141,14 @@ $archive$;
     <!-- Keep the old version record for audit. Never reactivate the old runner. -->
     <rollback/>
   </changeSet>
+  <changeSet id="0010_messaging_pagination" author="commerce" logicalFilePath="commerce/tenant">
+    <sqlFile path="../db/migrations/tenant/0010_messaging_pagination.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback>
+      <sqlFile path="../db/migrations/tenant/0010_messaging_pagination.down.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    </rollback>
+  </changeSet>
+  <changeSet id="0011_live_inbox" author="commerce" logicalFilePath="commerce/tenant">
+    <sqlFile path="../db/migrations/tenant/0011_live_inbox.up.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="false"/>
+    <rollback><sqlFile path="../db/migrations/tenant/0011_live_inbox.down.sql" relativeToChangelogFile="true" splitStatements="false"/></rollback>
+  </changeSet>
 </databaseChangeLog>
